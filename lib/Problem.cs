@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace bot;
 
 public record Skill(string Name, int Level);
@@ -7,6 +9,11 @@ public record Person(string Name, Skill[] Skills)
     public override string ToString()
     {
         return $"{Name} {Skills.StrJoin("; ")}";
+    }
+
+    public bool HasSkill(Skill role)
+    {
+        return Skills.Any(s => s.Name == role.Name && s.Level >= role.Level);
     }
 }
 

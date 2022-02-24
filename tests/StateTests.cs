@@ -17,6 +17,8 @@ public class StateTests
     public void Test(string name)
     {
         var problem = new ProblemReader().ReadByName(name);
+        Console.WriteLine(problem.Ideas.Max(idea => idea.Duration));
+        Console.WriteLine(problem.Ideas.Length);
         Console.WriteLine(problem);
     }
 
