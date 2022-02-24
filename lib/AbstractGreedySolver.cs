@@ -7,7 +7,7 @@ namespace bot;
 public abstract class AbstractGreedySolver<TGameState, TMove> : ISolver<TGameState, SingleMoveSolution<TMove>>
 {
     private readonly IEstimator<TGameState> estimator;
-    private readonly Random random = new Random(56);
+    private readonly Random random = new Random();
 
     protected AbstractGreedySolver(IEstimator<TGameState> estimator)
     {
