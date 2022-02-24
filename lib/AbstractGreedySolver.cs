@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +7,7 @@ namespace bot;
 public abstract class AbstractGreedySolver<TGameState, TMove> : ISolver<TGameState, SingleMoveSolution<TMove>>
 {
     private readonly IEstimator<TGameState> estimator;
+    private readonly Random random = new Random(56);
 
     protected AbstractGreedySolver(IEstimator<TGameState> estimator)
     {
@@ -16,7 +18,7 @@ public abstract class AbstractGreedySolver<TGameState, TMove> : ISolver<TGameSta
     {
         var moves = GetMoves(problem)
             .Select(m => CreateGreedySolution(problem, m, countdown))
-            .OrderBy(s => s.Score);
+            .OrderBy(s => s.Score).Take(5).OrderBy(_ => random.Next()).ToList();
         return moves;
     }
 
