@@ -12,6 +12,7 @@ public class GreedySolver : AbstractGreedySolver<State, Project>
 
     protected override State ApplyMove(State problem, Project move)
     {
+        problem = problem.Clone();
         if (move == null)
         {
             problem.WaitNextProjectFinish();
