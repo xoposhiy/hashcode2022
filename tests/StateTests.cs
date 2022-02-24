@@ -48,9 +48,22 @@ public class StateTests
 
         while (true)
         {
-            var singleMoveSolution = greedySolver.GetSolutions(state, int.MaxValue).FirstOrDefault();
-            if (singleMoveSolution == default) break;
-            state.Projects.Add(singleMoveSolution.Move);
+            var singleMoveSolution = greedySolver.GetSolutions(state, int.MaxValue).ToList();
+            if (singleMoveSolution.Count == 0)
+            {
+                break;
+            }
+
+            var move = singleMoveSolution.First().Move;
+
+            if (move == null)
+            {
+                state.WaitNextProjectFinish();
+            }
+            else
+            {
+                state.StartProject(move);
+            }
         }
 
         Console.WriteLine(stupidEstimator.GetScore(state));
