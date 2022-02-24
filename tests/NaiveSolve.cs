@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using NUnit.Framework;
@@ -19,7 +20,8 @@ public class NaiveSolve
     {
         var problem = new ProblemReader().ReadByName(name);
         var state = new State(problem);
-        while (!state.IsFinished())
+        var sw = Stopwatch.StartNew();
+        while (!state.IsFinished() && sw.ElapsedMilliseconds < 10000)
         {
             var move = state.GetPossibleProjectsToStart().FirstOrDefault();
             if (move == null)
@@ -27,7 +29,7 @@ public class NaiveSolve
             else
                 state.StartProject(move);
         }
-
+        Console.WriteLine($"{state.Time} {state.NotStarted.Count} {state.Projects.Count}");
         Console.WriteLine(new StupidEstimator().GetScore(state));
     }
 }

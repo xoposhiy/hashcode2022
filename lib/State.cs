@@ -7,14 +7,14 @@ namespace bot;
 
 public class State
 {
-    public State(HashSet<Idea> notStarted, HashSet<Project> inProgress, HashSet<Person> freePeople, Problem problem, List<Project> projects, int time)
+    public State(HashSet<Idea> notStarted, HashSet<Project> inProgress, Dictionary<string, HashSet<Person>> freePeopleBySkill, Problem problem, List<Project> projects, int time)
     {
         this.NotStarted = notStarted;
         this.InProgress = inProgress;
-        this.FreePeople = freePeople;
         Problem = problem;
         Projects = projects;
         Time = time;
+        FreePeopleBySkill = freePeopleBySkill;
     }
 
     public State(Problem problem)
@@ -24,12 +24,20 @@ public class State
         Projects = new List<Project>();
         NotStarted = problem.Ideas.ToHashSet();
         InProgress = new HashSet<Project>();
-        FreePeople = problem.People.ToHashSet();
+        FreePeopleBySkill = new Dictionary<string, HashSet<Person>>();
+        foreach (var person in problem.People)
+        {
+            foreach (var skill in person.Skills)
+            {
+                var set = FreePeopleBySkill.GetOrCreate(skill.Name, skillName => new HashSet<Person>());
+                set.Add(person);
+            }
+        }
     }
 
     public readonly HashSet<Idea> NotStarted;
     public readonly HashSet<Project> InProgress;
-    public readonly HashSet<Person> FreePeople;
+    public readonly Dictionary<string, HashSet<Person>> FreePeopleBySkill;
     
     public IEnumerable<Project> GetPossibleProjectsToStart()
     {
@@ -42,7 +50,9 @@ public class State
         for (int iRole = 0; iRole < idea.Roles.Length; iRole++)
         {
             var ideaRole = idea.Roles[iRole];
-            var person = FreePeople.Where(p => !team.Contains(p) && p.HasSkill(ideaRole)).MinBy(p => p.Skills.Sum(s => s.Level));
+            var person = FreePeopleBySkill[ideaRole.Name].Where(p => !team.Contains(p) && p.HasSkill(ideaRole))
+                .FirstOrDefault();
+                //.MinBy(p => p.Skills.Sum(s => s.Level));
             if (person == null)
                 return null;
             team[iRole] = person;
@@ -64,7 +74,8 @@ public class State
         InProgress.Add(project);
         NotStarted.Remove(project.Idea);
         foreach (var member in project.Members)
-            FreePeople.Remove(member);
+            foreach (var skill in member.Skills)
+                FreePeopleBySkill[skill.Name].Remove(member);
     }
     
     public void WaitNextProjectFinish()
@@ -75,7 +86,8 @@ public class State
         Time = projectToFinish.StartDay + projectToFinish.Idea.Duration;
         var newFreePeople = projectToFinish.Members.Select((m, i) => LevelUp(m, projectToFinish.Idea.Roles[i]));
         foreach (var person in newFreePeople)
-            FreePeople.Add(person);
+            foreach (var skill in person.Skills)
+                FreePeopleBySkill[skill.Name].Add(person);
         InProgress.Remove(projectToFinish);
     }
 
@@ -95,7 +107,7 @@ public class State
 
     public State Clone()
     {
-        return new State(NotStarted.ToHashSet(), InProgress.ToHashSet(), FreePeople.ToHashSet(), 
+        return new State(NotStarted.ToHashSet(), InProgress.ToHashSet(), FreePeopleBySkill.ToDictionary(kv => kv.Key, kv => kv.Value.ToHashSet()), 
             Problem, Projects.ToList(), Time);
     }
 

@@ -12,6 +12,7 @@ public class GreedySolver : AbstractGreedySolver<State, Project>
 
     protected override State ApplyMove(State problem, Project move)
     {
+        problem = problem.Clone();
         if (move == null)
         {
             problem.WaitNextProjectFinish();
@@ -27,6 +28,10 @@ public class GreedySolver : AbstractGreedySolver<State, Project>
     protected override IEnumerable<Project> GetMoves(State problem)
     {
         var moves = problem.GetPossibleProjectsToStart().ToList();
+        if (moves.Count == 0 && problem.InProgress.Count == 0)
+        {
+            return Enumerable.Empty<Project>();
+        }
         return moves.Count == 0 ? new() { null } : moves;
     }
 }
