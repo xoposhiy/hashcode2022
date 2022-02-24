@@ -6,6 +6,7 @@ public class GreedySolver : AbstractGreedySolver<State, Project>
 {
     public GreedySolver(IEstimator<State> estimator) : base(estimator)
     {
+        
     }
 
     protected override State ApplyMove(State problem, Project move)

@@ -38,4 +38,11 @@ public class Project
     public readonly Idea Idea;
     public readonly Person[] Members;
     public readonly int StartDay;
+
+    public int GetPoints()
+    {
+        if (Idea.Duration + StartDay > Idea.BestBefore)
+            return Math.Max(0, Idea.Score - (Idea.Duration + StartDay - Idea.BestBefore));
+        return Idea.Score;
+    }
 }
