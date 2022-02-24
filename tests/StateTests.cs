@@ -71,8 +71,11 @@ public class StateTests
             }
         }
 
-        Console.WriteLine(stupidEstimator.GetScore(state));
-        Console.WriteLine(state);
+        var score = stupidEstimator.GetScore(state);
+        Console.WriteLine(score);
+        //Console.WriteLine(state);
+        File.WriteAllText($"../../../../solutions/{name}-{score}.out.txt", state.ToString());
+
     }
     
     [TestCase("a_an_example")]

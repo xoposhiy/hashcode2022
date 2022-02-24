@@ -51,8 +51,8 @@ public class State
         {
             var ideaRole = idea.Roles[iRole];
             var person = FreePeopleBySkill[ideaRole.Name].Where(p => !team.Contains(p) && p.HasSkill(ideaRole))
-                .FirstOrDefault();
-                //.MinBy(p => p.Skills.Sum(s => s.Level));
+                //.FirstOrDefault();
+                .MinBy(p => p.Skills.Sum(s => s.Level));
             if (person == null)
                 return null;
             team[iRole] = person;
