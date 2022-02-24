@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace bot;
 
@@ -11,13 +12,21 @@ public class GreedySolver : AbstractGreedySolver<State, Project>
 
     protected override State ApplyMove(State problem, Project move)
     {
-        var copy = problem.Clone();
-        copy.Projects.Add(move);
-        return copy;
+        if (move == null)
+        {
+            problem.WaitNextProjectFinish();
+        }
+        else
+        {
+            problem.StartProject(move);
+        }
+        
+        return problem;
     }
 
     protected override IEnumerable<Project> GetMoves(State problem)
     {
-        return problem.GetPossibleProjectsToStart();
+        var moves = problem.GetPossibleProjectsToStart().ToList();
+        return moves.Count == 0 ? new() { null } : moves;
     }
 }
