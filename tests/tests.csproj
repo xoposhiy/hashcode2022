@@ -11,9 +11,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="nunit" Version="3.13.2"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0"/>
-        <ProjectReference Include="../lib/lib.csproj"/>
+        <PackageReference Include="nunit" Version="3.13.2" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+        <ProjectReference Include="../lib/lib.csproj" />
     </ItemGroup>
 
 </Project>

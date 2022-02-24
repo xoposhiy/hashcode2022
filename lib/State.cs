@@ -49,9 +49,19 @@ public class State
         return new Project(idea, team, Time);
     }
 
+    public bool IsFinished()
+    {
+        if (NotStarted.Count == 0 && InProgress.Count == 0) return true;
+        if (InProgress.Count > 0) return false;
+        // InProgress.Count == 0 && NotStarted.Count > 0 && не можем ничего запустить (из-за скиллов) :(
+        return !GetPossibleProjectsToStart().Any();
+    }
+
     public void StartProject(Project project)
     {
+        Projects.Add(project);
         InProgress.Add(project);
+        NotStarted.Remove(project.Idea);
         foreach (var member in project.Members)
             FreePeople.Remove(member);
     }
@@ -65,6 +75,7 @@ public class State
         var newFreePeople = projectToFinish.Members.Select((m, i) => LevelUp(m, projectToFinish.Idea.Roles[i]));
         foreach (var person in newFreePeople)
             FreePeople.Add(person);
+        InProgress.Remove(projectToFinish);
     }
 
     private Person LevelUp(Person person, Skill role)
