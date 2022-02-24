@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace bot;
 
@@ -101,6 +102,23 @@ public class State
     public readonly Problem Problem;
     public readonly List<Project> Projects;
     public int Time;
+
+    public override string ToString()
+    {
+         var res = new StringBuilder();
+         res.Append(Projects.Count);
+         res.Append("\n");
+         foreach (var project in Projects)
+         {
+             res.Append(project.Idea.Name);
+             res.Append("\n");
+             var peoples = string.Join(' ', project.Members.Select(m => m.Name));
+             res.Append(peoples);
+             res.Append("\n");
+         }
+
+         return res.ToString();
+    }
 }
 
 public class Project

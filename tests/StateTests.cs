@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 
@@ -19,7 +21,10 @@ public class StateTests
         var problem = new ProblemReader().ReadByName(name);
         Console.WriteLine(problem.Ideas.Max(idea => idea.Duration));
         Console.WriteLine(problem.Ideas.Length);
-        Console.WriteLine(problem);
+        var skillsCount = problem.People.Select(e => e.Skills.Length).OrderByDescending(e => e).First();
+
+        var projectRolesCount = problem.Ideas.Select(e => e.Roles.Length).OrderByDescending(e => e).First();
+        Console.WriteLine(projectRolesCount);
     }
 
 
@@ -55,5 +60,30 @@ public class StateTests
 
         Console.WriteLine(stupidEstimator.GetScore(state));
         Console.WriteLine(state);
+    }
+    
+    [TestCase("a_an_example")]
+    [TestCase("b_better_start_small")]
+    [TestCase("c_collaboration")]
+    [TestCase("d_dense_schedule")]
+    [TestCase("e_exceptional_skills")]
+    [TestCase("f_find_great_mentors")]
+    public void NaiveSolveWriter(string name)
+    {
+        var problem = new ProblemReader().ReadByName(name);
+        var state = new State(problem);
+        var sw = new Stopwatch();
+        sw.Start();
+        while (!state.IsFinished())
+        {
+            var move = state.GetPossibleProjectsToStart().FirstOrDefault();
+            if (move == null)
+                state.WaitNextProjectFinish();
+            else
+                state.StartProject(move);
+            if (sw.ElapsedMilliseconds > 20000)
+                break;
+        }
+        File.WriteAllText($"../../../../data/{name}.out.txt", state.ToString());
     }
 }
