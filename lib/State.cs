@@ -6,10 +6,10 @@ namespace bot;
 
 public class State
 {
-    public State(Problem problem, List<Project> projects)
+    public State(Problem problem, List<Project> projects = null)
     {
         Problem = problem;
-        Projects = projects;
+        Projects = projects ?? new List<Project>();
     }
 
     public IEnumerable<Project> GetPossibleProjectsToStart()
