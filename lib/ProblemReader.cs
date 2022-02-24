@@ -14,7 +14,7 @@ public class ProblemReader
     public Problem ReadFrom(string[] lines)
     {
         var people = new List<Person>();
-        var projects = new List<Project>();
+        var projects = new List<Idea>();
         var i = 0;
         var nLine = lines[i++].Split();
         var nPeople = nLine[0].ToInt();
@@ -37,7 +37,7 @@ public class ProblemReader
             var bestBefore = line[3].ToInt();
             var rolesCount = line[4].ToInt();
             var roles = ReadSkills(rolesCount, lines, ref i);
-            projects.Add(new Project(name, duration, score, bestBefore, roles));
+            projects.Add(new Idea(name, duration, score, bestBefore, roles));
         }
 
         return new Problem(people.ToArray(), projects.ToArray());

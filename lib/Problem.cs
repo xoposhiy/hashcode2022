@@ -10,7 +10,7 @@ public record Person(string Name, Skill[] Skills)
     }
 }
 
-public class Project
+public class Idea
 {
     public int BestBefore;
     public int Duration;
@@ -19,7 +19,7 @@ public class Project
     public Skill[] Roles;
     public int Score;
 
-    public Project(string name, int duration, int score, int bestBefore, Skill[] roles)
+    public Idea(string name, int duration, int score, int bestBefore, Skill[] roles)
     {
         Name = name;
         Duration = duration;
@@ -38,9 +38,9 @@ public class Project
 public class Problem
 {
     public Person[] People;
-    public Project[] Projects;
+    public Idea[] Projects;
 
-    public Problem(Person[] people, Project[] projects)
+    public Problem(Person[] people, Idea[] projects)
     {
         People = people;
         Projects = projects;
