@@ -84,6 +84,29 @@ public class StateTests
     [TestCase("d_dense_schedule")]
     [TestCase("e_exceptional_skills")]
     [TestCase("f_find_great_mentors")]
+    public void RepeaterTests(string name)
+    {
+        var stupidEstimator = new StupidEstimator();
+        var problem = new ProblemReader().ReadByName(name);
+        var state = new State(problem);
+
+        var repeaterSolver = new RepeaterSolver();
+
+        state = repeaterSolver.GetSolutions(state.Clone(), 12000);
+
+        var score = stupidEstimator.GetScore(state);
+        Console.WriteLine(score);
+        //Console.WriteLine(state);
+        File.WriteAllText($"../../../../solutions/{name}-{score}.out.txt", state.ToString());
+
+    }
+    
+    [TestCase("a_an_example")]
+    [TestCase("b_better_start_small")]
+    [TestCase("c_collaboration")]
+    [TestCase("d_dense_schedule")]
+    [TestCase("e_exceptional_skills")]
+    [TestCase("f_find_great_mentors")]
     public void NaiveSolveWriter(string name)
     {
         var problem = new ProblemReader().ReadByName(name);
