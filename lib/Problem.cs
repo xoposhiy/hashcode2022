@@ -38,16 +38,16 @@ public class Idea
 public class Problem
 {
     public Person[] People;
-    public Idea[] Projects;
+    public Idea[] Ideas;
 
-    public Problem(Person[] people, Idea[] projects)
+    public Problem(Person[] people, Idea[] ideas)
     {
         People = people;
-        Projects = projects;
+        Ideas = ideas;
     }
 
     public override string ToString()
     {
-        return People.StrJoin("\n") + "\n\n" + Projects.StrJoin("\n");
+        return People.StrJoin("\n") + "\n\n" + Ideas.StrJoin("\n");
     }
 }
