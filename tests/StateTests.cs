@@ -97,6 +97,8 @@ public class StateTests
             if (sw.ElapsedMilliseconds > 20000)
                 break;
         }
-        File.WriteAllText($"../../../../data/{name}.out.txt", state.ToString());
+
+        var score = new StupidEstimator().GetScore(state);
+        File.WriteAllText($"../../../../solutions/{name}-{score}.out.txt", state.ToString());
     }
 }
