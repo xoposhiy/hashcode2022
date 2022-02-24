@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace bot;
 
@@ -18,11 +19,11 @@ public class State
 
     public State Clone()
     {
-        throw new NotImplementedException();
+        return new State(Problem, Projects.ToList());
     }
 
-    public Problem Problem;
-    public List<Project> Projects;
+    public readonly Problem Problem;
+    public readonly List<Project> Projects;
 }
 
 public class Project
@@ -34,7 +35,7 @@ public class Project
         StartDay = startDay;
     }
 
-    public Idea Idea;
-    public Person[] Members;
-    public int StartDay;
+    public readonly Idea Idea;
+    public readonly Person[] Members;
+    public readonly int StartDay;
 }
